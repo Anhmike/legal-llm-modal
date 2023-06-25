@@ -112,8 +112,7 @@ def load_images(image_urls):
             MODEL_DIR
         ): volume,  # fine-tuned model will be stored at `MODEL_DIR`
     },
-    timeout=1800,  # 30 minutes
-    secrets=[Secret.from_name("my-huggingface-secret")],
+    timeout=1800  # 30 minutes
 
 )
 def train(instance_example_urls):
