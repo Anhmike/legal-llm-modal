@@ -9,7 +9,7 @@ import modal
 
 web_app = FastAPI()
 assets_path = Path(__file__).parent / "assets"
-stub = Stub(name="example-dreambooth-app" )
+stub = Stub(name="legal-llm-modal" )
 
 GIT_SHA = "ed616bd8a8740927770eebe017aedb6204c6105f"
 
