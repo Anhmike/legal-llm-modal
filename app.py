@@ -112,8 +112,8 @@ def load_images(image_urls):
             MODEL_DIR
         ): volume,  # fine-tuned model will be stored at `MODEL_DIR`
     },
-    timeout=1800  # 30 minutes
-
+    timeout=1800,  # 30 minutes
+    secret=[Secret.from_name("my-huggingface-secret")]
 )
 def train(instance_example_urls):
     import subprocess
@@ -204,8 +204,8 @@ class Model:
 @stub.function(
     image=image,
     concurrency_limit=3,
-    mounts=[Mount.from_local_dir(assets_path, remote_path="./assets")],
-    secret=[Secret.from_name("my-huggingface-secret")]
+    mounts=[Mount.from_local_dir(assets_path, remote_path="./assets")]
+    
 )
 @asgi_app()
 def fastapi_app():
