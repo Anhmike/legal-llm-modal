@@ -5,7 +5,7 @@ from pathlib import Path
 from fastapi import FastAPI
 
 from modal import Image, Mount, Secret, SharedVolume, Stub, asgi_app, method
-import modal
+
 
 web_app = FastAPI()
 assets_path = Path(__file__).parent / "assets"
@@ -113,8 +113,8 @@ def load_images(image_urls):
         ): volume,  # fine-tuned model will be stored at `MODEL_DIR`
     },
     timeout=1800,  # 30 minutes
-    # secrets=[Secret.from_name("huggingface")],
-    secret=modal.Secret.from_name("my-huggingface-secret") 
+    secrets=[Secret.from_name("my-huggingface-secret")],
+
 )
 def train(instance_example_urls):
     import subprocess
@@ -205,8 +205,8 @@ class Model:
 @stub.function(
     image=image,
     concurrency_limit=3,
-    mounts=[Mount.from_local_dir(assets_path, remote_path="/assets")],
-    secret=modal.Secret.from_name("my-huggingface-secret") 
+    mounts=[Mount.from_local_dir(assets_path, remote_path="./assets")],
+    secret=[Secret.from_name("my-huggingface-secret")]
 )
 @asgi_app()
 def fastapi_app():
@@ -246,7 +246,7 @@ def fastapi_app():
         title=f"Generate images of {instance_phrase}.",
         description=description,
         examples=example_prompts,
-        css="/assets/index.css",
+        css="./assets/index.css",
         allow_flagging="never",
     )
 
@@ -256,6 +256,7 @@ def fastapi_app():
         blocks=interface,
         path="/",
     )
+
 @stub.local_entrypoint()
 def run():
     with open(TrainConfig().instance_example_urls_file) as f:
