@@ -256,5 +256,9 @@ def fastapi_app():
         blocks=interface,
         path="/",
     )
-
+@stub.local_entrypoint()
+def run():
+    with open(TrainConfig().instance_example_urls_file) as f:
+        instance_example_urls = [line.strip() for line in f.readlines()]
+    train.call(instance_example_urls)
 
